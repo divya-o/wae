@@ -1,0 +1,12 @@
+node_modules/
+
+#internal runtime operational log databases
+*.db
+*.db-wal
+*.db-shm
+
+*.log
+
+wae-vault/
+demo/
+test-db.js
