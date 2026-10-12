@@ -7,7 +7,8 @@
     "wae": "./src/index.js"
   },
   "scripts": {
-    "start": "node ./src/index.js"
+    "start": "node ./src/index.js",
+    "worker": "node ./src/temporalWorker.js"
   },
   "engines": {
     "node": ">=18"
@@ -17,5 +18,11 @@
     "better-sqlite3": "^11.3.0",
     "node-pty": "^1.1.0",
     "zod": "^3.23.8"
+  },
+  "optionalDependencies": {
+    "@temporalio/activity": "^1.11.0",
+    "@temporalio/client": "^1.11.0",
+    "@temporalio/worker": "^1.11.0",
+    "@temporalio/workflow": "^1.11.0"
   }
 }
