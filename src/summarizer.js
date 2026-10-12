@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { db, dbDirectory, vaultDirectory } from './database.js';
+import { db, dbDirectory, outputDirectory } from './database.js';
 
 const sessionId = process.argv[2];
 if (!sessionId) process.exit(1);
@@ -77,8 +77,8 @@ Write EXACTLY 3 bullets, each under 15 words, in this layout and nothing else:
   const summary = (data.response || '').trim();
   if (!summary) throw new Error('Ollama returned an empty summary');
 
-  fs.mkdirSync(vaultDirectory, { recursive: true });
-  const target = path.join(vaultDirectory, `wae-flight-log-${Date.now()}.md`);
+  fs.mkdirSync(outputDirectory, { recursive: true });
+  const target = path.join(outputDirectory, `wae-flight-log-${Date.now()}.md`);
   const note = [
     `# wae session: \`${originCommand}\``,
     '',

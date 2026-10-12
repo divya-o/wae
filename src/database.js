@@ -2,13 +2,13 @@ import Database from 'better-sqlite3';
 import path from 'path';
 import os from 'os';
 import fs from 'fs';
+import { resolveOutputDir } from './config.js';
 
 const dbDir = path.join(os.homedir(), '.wae');
 fs.mkdirSync(dbDir, { recursive: true });
 
 export const dbDirectory = dbDir;
-export const vaultDirectory = process.env.WAE_VAULT || path.join(dbDir, 'vault');
-
+export const outputDirectory = resolveOutputDir();
 export const db = new Database(path.join(dbDir, 'wae_vault.db'));
 
 //concurrency settings- writer (PTY) and the reader (summarizer) never block each other
