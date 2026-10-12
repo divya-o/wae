@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import fs from 'fs';
 import { fork } from 'child_process';
 import path from 'path';
 import readline from 'readline/promises';
@@ -12,7 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));                 
 // Management flags owned by wae. They are stripped BEFORE the command
 // reaches the shell wrapper so target binaries (uv, git, ...) never see them
 
-const MANAGEMENT_FLAGS = new Set(['--mcp', '--help', '-h']);
+const MANAGEMENT_FLAGS = new Set(['--mcp', '--help', '-h', '--durable']);
 
 function parseArgs(argv) {
   const flags= new Set();
@@ -30,6 +31,7 @@ function printUsage() {
 
 Usage:
   wae <command> [args...]    Record a session, e.g.  wae claude
+  wae --durable <command>      Hand summarizing to the Temporal worker (if installed)
   wae --mcp                  Start the stdio MCP server (no ports)
   wae --output                 Show the folder where summaries are saved
   wae --set-output [path]      Set the summary folder (prompts if no path given)
@@ -38,6 +40,18 @@ Env:
   WAE_VAULT    Vault folder Path   (default: ~/.wae/vault)
   WAE_MODEL   Ollama model name       (default: gemma3)
 `);
+}
+
+function pickWorker(durable) {
+  const standard = path.join(__dirname, 'summarizer.js');
+  if (!durable) return standard;
+  const durablePath = path.join(__dirname, 'temporalClient.js');
+  if (fs.existsSync(durablePath)) {
+    console.log('⚡ [wae] Durable mode: handing session to the Temporal worker.');
+    return durablePath;
+  }
+  console.error('[wae] Durable mode not installed yet. Using the standard summarizer.');
+  return standard;
 }
 
 async function promptForPath() {
@@ -84,7 +98,8 @@ async function main() {
   const exitCode = await spawnPTY(command[0], command.slice(1), sessionId);
 
   // onn detach worker
-  const workerPath = path.resolve(__dirname, 'summarizer.js');
+  // const workerPath = path.resolve(__dirname, 'summarizer.js');
+  const workerPath = pickWorker(flags.has('--durable'));
   const child = fork(workerPath, [sessionId], {
     detached: true,
     stdio: 'ignore'

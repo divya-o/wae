@@ -78,7 +78,7 @@ Write EXACTLY 3 bullets, each under 15 words, in this layout and nothing else:
   if (!summary) throw new Error('Ollama returned an empty summary');
 
   fs.mkdirSync(outputDirectory, { recursive: true });
-  const target = path.join(outputDirectory, `wae-flight-log-${Date.now()}.md`);
+  const target = path.join(outputDirectory, `wae-flight-log-${sessionId.replace(/^session_/, '')}.md`);
   const note = [
     `# wae session: \`${originCommand}\``,
     '',
