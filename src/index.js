@@ -8,10 +8,8 @@ import { spawnPTY } from './ptyWrapper.js';
 import { initDB, createSession } from './database.js';
 import { resolveOutputDir, setOutputDir } from './config.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));                 //currently hardcoded path in use 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));                 
 
-// Management flags owned by wae. They are stripped BEFORE the command
-// reaches the shell wrapper so target binaries (uv, git, ...) never see them
 
 const MANAGEMENT_FLAGS = new Set(['--mcp', '--help', '-h', '--durable']);
 
@@ -47,7 +45,7 @@ function pickWorker(durable) {
   if (!durable) return standard;
   const durablePath = path.join(__dirname, 'temporalClient.js');
   if (fs.existsSync(durablePath)) {
-    console.log('⚡ [wae] Durable mode: handing session to the Temporal worker.');
+    console.log(' [ wae ] Durable mode active: handing session to the Temporal worker.');
     return durablePath;
   }
   console.error('[wae] Durable mode not installed yet. Using the standard summarizer.');

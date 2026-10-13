@@ -1,5 +1,3 @@
-// Workflow code runs in Temporal's sandbox, so it must live in its own file
-// and may only import from @temporalio/workflow. All real work happens in activities.
 import { proxyActivities } from '@temporalio/workflow';
 
 const { loadSessionContext, generateSummary, writeNoteToDisk, purgeSession } = proxyActivities({

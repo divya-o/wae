@@ -7,7 +7,7 @@
 *wae* - a zero-config human-agent session anchor or flight recorder for terminal sessions. It records your session, strips terminal noise and secrets, and when you exit, a local open-weight model writes a short **Actions / Errors / State** note into any vault or folder you choose. Everything runs on your machine.
 
 - **Instant exit.** Summarizes in the detached background,  prompt returns immediately.
-- **Local only.** No ports opened; communicates with Ollama on 127.0.0.1.
+- **Local only.** No ports opened; communicates with Ollama on 127.0.0.1. ollama(used for current demo)
 - **Crash-tolerant capture.** Output is written to SQLite (WAL mode) in small batches, so after a crash or hard kill you should lose at most the last unflushed buffer (up to 1000 characters).
 - **Context-safe.** The model never sees raw logs, only a filtered set of high-value lines.
 - **Optional durability.** `wae --durable` hands the summary to a Temporal workflow that retries if Ollama is unavailable

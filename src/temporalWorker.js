@@ -1,4 +1,3 @@
-// Long-running worker. Start once in its own terminal:  node src/temporalWorker.js
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -13,7 +12,7 @@ const OLLAMA_URL = 'http://127.0.0.1:11434/api/generate';
 const MODEL = process.env.WAE_MODEL || 'gemma3';
 
 const MAX_LINES = 50;       // context-window guard: max footprint lines
-const MAX_LINE_CHARS = 300; // ...and max characters per line
+const MAX_LINE_CHARS = 300; 
 
 // Context-window selection matrix: only structural footprints survive.
 const FOOTPRINTS = [
@@ -54,16 +53,16 @@ const activities = {
   },
 
   async generateSummary(context, originCommand) {
-    const prompt = `You are an offline terminal flight-log compressor.
+    const prompt = `You are an offline terminal flight-log summarizer
 Command run: ${originCommand}
 
 Execution footprints (filtered):
 ${context}
 
 Write EXACTLY 3 bullets, each under 15 words, in this layout and nothing else:
-- 🛠️ ACTIONS: (file or environment changes made)
-- 🛑 ERRORS: (problems hit, or "None")
-- 🎯 STATE: (final workspace status)`;
+-  ACTIONS: (file or environment changes made, git activity made)
+-  ERRORS: (problems hit, or "None")
+-  STATE: (final workspace status)`;
 
     const response = await fetch(OLLAMA_URL, {
       method: 'POST',
@@ -122,5 +121,5 @@ const worker = await Worker.create({
   activities
 });
 
-console.log(`🌿 [wae] Temporal worker listening on "${TASK_QUEUE}" (${ADDRESS}). Ctrl+C to stop.`);
+console.log(` [ wae ] Temporal worker listening on "${TASK_QUEUE}" (${ADDRESS}). Ctrl+C to stop.`);
 await worker.run();
